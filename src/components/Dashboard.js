@@ -1,100 +1,112 @@
 import React, { useState } from "react";
-import { Grid, Paper, Typography, makeStyles, Button } from "@material-ui/core";
-import { Add } from "@material-ui/icons";
-import { ProductList } from "./ProductList";
-import { AddProductDialog } from "./AddProductDialog";
-
+import { Container, makeStyles, Typography, Button } from "@material-ui/core";
+import ProductList from "./ProductList";
+import ProductForm from "./ProductForm";
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-  paper: {
-    padding: theme.spacing(3),
+  container: {
+    marginTop: theme.spacing(4),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   title: {
     marginBottom: theme.spacing(2),
   },
   addButton: {
-    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    alignSelf: "flex-end",
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+    "&:hover": {
+      backgroundColor: theme.palette.common.white,
+      color: theme.palette.primary.main,
+    },
   },
 }));
 
-export const Dashboard = () => {
+const productsData = [
+  {
+    id: 1,
+    name: "Product 1",
+    description: "This is the first product",
+    price: 9.99,
+    date: "2023-05-17",
+    weight: "0.5",
+    number: 10,
+    image: "",
+    category: "electronics",
+  },
+  {
+    id: 2,
+    name: "Product 2",
+    description: "This is the second product",
+    price: 19.99,
+    date: "2023-05-18",
+    weight: "1",
+    number: 5,
+    image: "",
+    category: "electronics",
+  },
+];
+const Dashboard = () => {
   const classes = useStyles();
+  const [products, setProducts] = useState(productsData);
+  const [productFormOpen, setProductFormOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState("");
 
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Product 1",
-      description: "This is product 1",
-      price: 10.0,
-      weight: 0.25,
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      description: "This is product 2",
-      price: 20.0,
-      weight: 0.5,
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      description: "This is product 3",
-      price: 30.0,
-      weight: 1.0,
-    },
-  ]);
+  const handleAddProduct = () => {
+    setSelectedProduct("");
+    setProductFormOpen(true);
+  };
 
-  const [openAddProductDialog, setOpenAddProductDialog] = useState(false);
-
-  const handleAddProduct = (product) => {
-    setProducts([...products, product]);
+  const handleEditProduct = (product) => {
+    setSelectedProduct(product);
+    setProductFormOpen(true);
   };
 
   const handleDeleteProduct = (productId) => {
     setProducts(products.filter((product) => product.id !== productId));
   };
 
-  const handleOpenAddProductDialog = () => {
-    setOpenAddProductDialog(true);
+  const handleSubmitProductForm = (product) => {
+    if (product.id) {
+      setProducts(products.map((p) => (p.id === product.id ? product : p)));
+    } else {
+      const newProductId =
+        products.length > 0 ? products[products.length - 1].id + 1 : 1;
+      setProducts([...products, { ...product, id: newProductId }]);
+    }
+    setProductFormOpen(false);
   };
 
-  const handleCloseAddProductDialog = () => {
-    setOpenAddProductDialog(false);
+  const handleProductSelect = (productId) => {
+    const product = products.find((product) => product.id === productId);
+    setSelectedProduct(product);
   };
 
   return (
-    <div className={classes.root}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Typography variant="h3" className={classes.title}>
-            Products
-          </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.addButton}
-            startIcon={<Add />}
-            onClick={handleOpenAddProductDialog}
-          >
-            Add Product
-          </Button>
-          <Paper className={classes.paper}>
-            <ProductList
-              products={products}
-              handleEdit={() => {}}
-              handleDelete={handleDeleteProduct}
-            />
-          </Paper>
-        </Grid>
-      </Grid>
-      <AddProductDialog
-        open={openAddProductDialog}
-        handleClose={handleCloseAddProductDialog}
-        handleAddProduct={handleAddProduct}
+    <Container maxWidth="md" className={classes.container}>
+      <Typography variant="h3" component="h1" className={classes.title}>
+        Product List
+      </Typography>
+      <ProductList
+        products={products}
+        onEditProduct={handleEditProduct}
+        onDeleteProduct={handleDeleteProduct}
+        onProductSelect={handleProductSelect}
+        setSelectedProduct={setSelectedProduct}
       />
-    </div>
+      <Button onClick={handleAddProduct} className={classes.addButton}>
+        Add Product
+      </Button>
+      <ProductForm
+        open={productFormOpen}
+        onClose={() => setProductFormOpen(false)}
+        onSubmit={handleSubmitProductForm}
+        product={selectedProduct}
+      />
+    </Container>
   );
 };
+
+export default Dashboard;
