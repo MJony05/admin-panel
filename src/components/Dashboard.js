@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
   },
   addButton: {
     marginTop: theme.spacing(2),
-    alignSelf: "flex-end",
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
     "&:hover": {
@@ -89,6 +88,9 @@ const Dashboard = () => {
       <Typography variant="h3" component="h1" className={classes.title}>
         Product List
       </Typography>
+      <Button onClick={handleAddProduct} className={classes.addButton}>
+        Add Product
+      </Button>
       <ProductList
         products={products}
         onEditProduct={handleEditProduct}
@@ -96,9 +98,7 @@ const Dashboard = () => {
         onProductSelect={handleProductSelect}
         setSelectedProduct={setSelectedProduct}
       />
-      <Button onClick={handleAddProduct} className={classes.addButton}>
-        Add Product
-      </Button>
+
       <ProductForm
         open={productFormOpen}
         onClose={() => setProductFormOpen(false)}
