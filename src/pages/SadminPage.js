@@ -1,13 +1,7 @@
 import React, { useState } from "react";
-import {
-  Container,
-  makeStyles,
-  Typography,
-  Button,
-  TextField,
-} from "@material-ui/core";
-import ProductList from "./ProductList";
-import ProductForm from "./ProductForm";
+import { Container, makeStyles, Typography, Button } from "@material-ui/core";
+import SadminList from "./SadminList";
+import SadminForm from "./SadminForm";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -30,59 +24,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const productsData = [
+const adminData = [
   {
     id: 1,
-    name: "olma",
-    description: "This is the first product",
-    price: 9.99,
-    date: "2023-05-17",
-    weight: "0.5",
-    number: 10,
-    image: "",
-    category: "electronics",
+    name: "Jonibek",
+    sname: "Munirov",
+    age: "20",
+    username: "jony",
+    password: "jony123",
   },
   {
     id: 2,
-    name: "behi",
-    description: "This is the second product",
-    price: 19.99,
-    date: "2023-05-18",
-    weight: "1",
-    number: 5,
-    image: "",
-    category: "electronics",
-  },
-  {
-    id: 3,
-    name: "printer",
-    description: "This is the first product",
-    price: 9.99,
-    date: "2023-05-17",
-    weight: "0.5",
-    number: 10,
-    image: "",
-    category: "electronics",
-  },
-  {
-    id: 4,
-    name: "sichqoncha",
-    description: "This is the second product",
-    price: 19.99,
-    date: "2023-05-18",
-    weight: "1",
-    number: 5,
-    image: "",
-    category: "electronics",
+    name: "Sherzod",
+    sname: "Abduhakimov",
+    age: "21",
+    username: "sher",
+    password: "sher123",
   },
 ];
-const Dashboard = ({ userId }) => {
-  console.log(userId);
+const SadminPage = () => {
   const classes = useStyles();
-  const [products, setProducts] = useState(productsData);
+  const [products, setProducts] = useState(adminData);
   const [productFormOpen, setProductFormOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState("");
-  const [value, setValue] = useState("");
 
   const handleAddProduct = () => {
     setSelectedProduct("");
@@ -93,9 +57,9 @@ const Dashboard = ({ userId }) => {
     setSelectedProduct(product);
     setProductFormOpen(true);
   };
-  const handleChangee = (e) => {
-    setValue(e.target.value);
-  };
+  // const handleChangee = (e) => {
+  //   setValue(e.target.value);
+  // };
 
   const handleDeleteProduct = (productId) => {
     setProducts(products.filter((product) => product.id !== productId));
@@ -120,42 +84,21 @@ const Dashboard = ({ userId }) => {
   return (
     <Container maxWidth="md" className={classes.container}>
       <Typography variant="h3" component="h1" className={classes.title}>
-        Product List
+        Admin List
       </Typography>
-      {userId === "admin" ? (
-        <div
-          style={{
-            display: "flex",
-            margin: "5px",
-          }}
-        >
-          <Button onClick={handleAddProduct} className={classes.addButton}>
-            Add Product
-          </Button>
-          <Button className={classes.addButton}>Hisobot</Button>
-          <Button className={classes.addButton}>Sprafka</Button>
-          <TextField
-            id="name"
-            label="filter"
-            variant="outlined"
-            className={classes.textField}
-            onChange={(e) => handleChangee(e)}
-          />
-        </div>
-      ) : (
-        <Button onClick={handleAddProduct} className={classes.addButton}>
-          Add Product
-        </Button>
-      )}
-      <ProductList
-        products={products.filter((product) => product.name.includes(value))}
+
+      <Button onClick={handleAddProduct} className={classes.addButton}>
+        Add Admin
+      </Button>
+      <SadminList
+        products={products}
         onEditProduct={handleEditProduct}
         onDeleteProduct={handleDeleteProduct}
         onProductSelect={handleProductSelect}
         setSelectedProduct={setSelectedProduct}
       />
 
-      <ProductForm
+      <SadminForm
         open={productFormOpen}
         onClose={() => setProductFormOpen(false)}
         onSubmit={handleSubmitProductForm}
@@ -165,4 +108,4 @@ const Dashboard = ({ userId }) => {
   );
 };
 
-export default Dashboard;
+export default SadminPage;

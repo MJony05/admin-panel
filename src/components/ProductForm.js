@@ -66,9 +66,8 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductForm = ({ open, onClose, onSubmit, product }) => {
   const classes = useStyles();
-  console.log(product);
   const [name, setName] = useState(product.name);
-  console.log(product.name);
+
   const [description, setDescription] = useState(
     product ? product.description : ""
   );
@@ -154,6 +153,15 @@ const ProductForm = ({ open, onClose, onSubmit, product }) => {
       image,
     };
     onSubmit(newProduct);
+    setName("");
+    setDescription("");
+    setDate("");
+    setPrice("");
+    setDate("");
+    setCategory("");
+    setWeight("");
+    setNumber("");
+    setImage("");
   };
 
   return (

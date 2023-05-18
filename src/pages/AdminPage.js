@@ -1,5 +1,10 @@
 import React from "react";
+import Dashboard from "../components/Dashboard";
 
 export default function AdminPage() {
-  return <div>AdminPage</div>;
+  return (
+    <div>
+      <Dashboard userId={"admin"} />
+    </div>
+  );
 }
